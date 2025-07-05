@@ -1,0 +1,205 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:latest
+    container_name: contentorganizer-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./docker/mongodb/init-scripts:/docker-entrypoint-initdb.d
+    environment:
+      MONGO_INITDB_DATABASE: contentorganizer
+    networks:
+      - contentorganizer-network
+
+  # Redis Message Broker
+  redis:
+    image: redis:latest
+    container_name: contentorganizer-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - contentorganizer-network
+
+  # Redis Commander (Redis GUI)
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: contentorganizer-redis-commander
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    depends_on:
+      - redis
+    networks:
+      - contentorganizer-network
+
+  # Mongo Express (MongoDB GUI)
+  mongo-express:
+    image: mongo-express:latest
+    container_name: contentorganizer-mongo-express
+    restart: unless-stopped
+    ports:
+      - "8082:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGODB_ROOT_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGODB_ROOT_PASSWORD}
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGODB_ROOT_USERNAME}:${MONGODB_ROOT_PASSWORD}@mongodb:27017/
+    depends_on:
+      - mongodb
+    networks:
+      - contentorganizer-network
+
+  # Orchestrator Service
+  orchestrator-service:
+    build:
+      context: ./services/orchestrator-service
+      dockerfile: Dockerfile
+    container_name: contentorganizer-orchestrator
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATA_MONGODB_HOST=mongodb
+      - SPRING_DATA_MONGODB_PORT=27017
+      - SPRING_DATA_MONGODB_DATABASE=contentorganizer
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_DATA_REDIS_PORT=6379
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - contentorganizer-network
+
+  # Music Service
+  music-service:
+    build:
+      context: ./services/music-service
+      dockerfile: Dockerfile
+    container_name: contentorganizer-music
+    restart: unless-stopped
+    ports:
+      - "8081:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATA_MONGODB_HOST=mongodb
+      - SPRING_DATA_REDIS_HOST=redis
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - contentorganizer-network
+
+  # Image Service
+  image-service:
+    build:
+      context: ./services/image-service
+      dockerfile: Dockerfile
+    container_name: contentorganizer-image
+    restart: unless-stopped
+    ports:
+      - "8082:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATA_MONGODB_HOST=mongodb
+      - SPRING_DATA_REDIS_HOST=redis
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - contentorganizer-network
+
+  # Video Service
+  video-service:
+    build:
+      context: ./services/video-service
+      dockerfile: Dockerfile
+    container_name: contentorganizer-video
+    restart: unless-stopped
+    ports:
+      - "8083:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATA_MONGODB_HOST=mongodb
+      - SPRING_DATA_REDIS_HOST=redis
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - contentorganizer-network
+
+  # SEO Service
+  seo-service:
+    build:
+      context: ./services/seo-service
+      dockerfile: Dockerfile
+    container_name: contentorganizer-seo
+    restart: unless-stopped
+    ports:
+      - "8084:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATA_MONGODB_HOST=mongodb
+      - SPRING_DATA_REDIS_HOST=redis
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - contentorganizer-network
+
+  # YouTube Service
+  youtube-service:
+    build:
+      context: ./services/youtube-service
+      dockerfile: Dockerfile
+    container_name: contentorganizer-youtube
+    restart: unless-stopped
+    ports:
+      - "8085:8085"
+    environment:
+      - SPRING_PROFILES_ACTIVE=local
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - GOOGLE_REFRESH_TOKEN=${GOOGLE_REFRESH_TOKEN}
+      - YOUTUBE_STREAM_KEY=${YOUTUBE_STREAM_KEY}
+    volumes:
+      - ./temp-videos:/app/temp-videos
+      - ./processed-videos:/app/processed-videos
+    depends_on:
+      - mongodb
+      - redis
+      - chatgpt-service
+
+  # ChatGPT Service
+  chatgpt-service:
+    build:
+      context: ./services/chatgpt-service
+      dockerfile: Dockerfile
+    container_name: contentorganizer-chatgpt
+    restart: unless-stopped
+    ports:
+      - "8086:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=local
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    networks:
+      - contentorganizer-network
+
+volumes:
+  mongodb_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  contentorganizer-network:
+    driver: bridge 

@@ -1,0 +1,7 @@
+# YouTube API Configuration
+youtube.client-id=your_client_id_here
+youtube.client-secret=your_client_secret_here
+youtube.refresh-token=your_refresh_token_here
+
+# YouTube Stream Configuration
+youtube.stream.key=your_stream_key_here 

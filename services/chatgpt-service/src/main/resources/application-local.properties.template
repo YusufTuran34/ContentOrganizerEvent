@@ -1,0 +1,13 @@
+# Template for local development environment
+# Copy this file to application-local.properties and fill in your credentials
+
+# OpenAI API Configuration
+OPENAI_API_KEY=your_openai_api_key_here
+
+# Local Development Configuration
+spring.profiles.active=local
+
+# Logging Configuration for Development
+logging.level.com.contentorganizer.chatgpt=DEBUG
+logging.level.org.springframework.web.reactive.function.client=DEBUG
+logging.level.reactor.netty.http.client=DEBUG 

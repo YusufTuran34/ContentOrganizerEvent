@@ -1,0 +1,281 @@
+# Content Organizer Event Driven System - Cursor Rules
+
+## Project Overview
+This is a content organizer system built with event-driven architecture patterns. The system should be scalable, maintainable, and follow modern software development practices.
+
+## Architecture Guidelines
+
+### Event-Driven Architecture
+- Use event sourcing patterns where appropriate
+- Implement proper event handlers and publishers
+- Maintain event schema versioning
+- Use message queues for asynchronous processing
+- Implement proper error handling and retry mechanisms
+
+### Microservices (if applicable)
+- Each service should have a single responsibility
+- Use API Gateway for external communication
+- Implement circuit breaker patterns
+- Use proper service discovery mechanisms
+
+## Code Quality Standards
+
+### General Principles
+- Follow SOLID principles
+- Use dependency injection
+- Implement proper error handling
+- Write self-documenting code
+- Use meaningful variable and function names
+
+### Code Structure
+- Use consistent naming conventions
+- Organize code into logical modules/packages
+- Separate concerns (business logic, data access, presentation)
+- Use design patterns appropriately
+
+## Technology Stack Guidelines
+
+### Backend
+- Use Java 17+ with Spring Boot 3.x
+- Use Gradle as build tool (NOT Maven)
+- ALWAYS add Swagger/OpenAPI 3.0 documentation to all REST APIs
+- ALWAYS use Spring Boot Actuator for health checks (NEVER create custom health endpoints)
+- Implement proper logging with SLF4J and Logback
+- Use Spring Profiles for environment-specific configurations
+- Use application-local.properties for credentials (NEVER in main application.properties)
+- Implement proper input validation with Bean Validation
+- Use Spring Security for authentication and authorization
+
+### Database
+- Use MongoDB as primary database
+- Implement proper MongoDB indexing strategies
+- Use Spring Data MongoDB for data access
+- Implement proper document versioning and migration strategies
+- Use MongoDB transactions where necessary
+
+### Message Broker
+- Use Redis for event streaming and caching
+- Implement proper message serialization/deserialization with JSON
+- Handle message ordering and deduplication
+- Implement Redis Pub/Sub for event-driven communication
+- Use Redis Streams for complex event processing
+
+### Containerization
+- Every service must be fully Dockerized
+- Use Docker Compose for local development
+- Implement multi-stage Docker builds for optimization
+- Use proper health checks in containers
+
+## Security Guidelines
+
+### Authentication & Authorization
+- Implement proper authentication mechanisms
+- Use JWT tokens with appropriate expiration
+- Implement role-based access control (RBAC)
+- Validate all inputs and sanitize outputs
+
+### Data Protection
+- Encrypt sensitive data at rest and in transit
+- Use HTTPS for all communications
+- Implement proper API rate limiting
+- Log security events appropriately
+
+## Testing Standards
+
+### Unit Testing
+- Write tests for all business logic
+- Maintain at least 80% code coverage
+- Use proper mocking for external dependencies
+- Test error scenarios and edge cases
+
+### Integration Testing
+- Test event flows end-to-end
+- Test database interactions
+- Test external API integrations
+- Test message queue operations
+
+### Performance Testing
+- Test system under load
+- Monitor response times
+- Test concurrent user scenarios
+- Test memory usage and resource consumption
+
+## Documentation Requirements
+
+### Code Documentation
+- Document all public APIs
+- Use JSDoc/docstrings for functions and classes
+- Document event schemas and formats
+- Maintain architectural decision records (ADRs)
+
+### System Documentation
+- Maintain system architecture diagrams
+- Document event flows and state transitions
+- Create deployment and setup guides
+- Document monitoring and alerting procedures
+
+### Service Documentation
+- ALWAYS create comprehensive README.md for each service
+- Include API usage examples and endpoint documentation
+- Document configuration options and environment variables
+- Provide Docker and local development setup instructions
+- Include Swagger UI links and API testing examples
+
+## Performance Guidelines
+
+### Optimization
+- Implement proper caching strategies
+- Use lazy loading where appropriate
+- Optimize database queries
+- Implement proper pagination for large datasets
+
+### Monitoring
+- Implement application metrics
+- Monitor system health and performance
+- Set up proper alerting for critical issues
+- Use distributed tracing for complex flows
+
+## Development Workflow
+
+### Version Control
+- Use conventional commit messages
+- Create feature branches for new development
+- Require code reviews for all changes
+- Use semantic versioning for releases
+
+### CI/CD
+- Implement automated testing in CI pipeline
+- Use automated deployment processes
+- Implement proper rollback mechanisms
+- Use blue-green or canary deployments
+
+### Environment Management
+- Use separate environments (dev, staging, prod)
+- Implement proper configuration management
+- Use infrastructure as code
+- Implement proper secret management
+
+## Error Handling
+
+### Logging
+- Use structured logging with appropriate levels
+- Include correlation IDs for tracing
+- Log all errors with sufficient context
+- Implement centralized logging
+
+### Resilience
+- Implement circuit breaker patterns
+- Use proper timeout configurations
+- Implement retry mechanisms with exponential backoff
+- Handle partial failures gracefully
+
+## Content Management Specific Guidelines
+
+### Content Processing
+- Implement proper content validation
+- Use appropriate content transformation pipelines
+- Implement content versioning
+- Handle different content types (text, images, videos, etc.)
+
+### Content Organization
+- Implement proper tagging and categorization
+- Use full-text search capabilities
+- Implement content hierarchies
+- Support content relationships and references
+
+### Content Events
+- Track content creation, modification, and deletion events
+- Implement content lifecycle management
+- Track user interactions with content
+- Implement content analytics and reporting
+
+## File Organization (Per Microservice)
+
+```
+/src/main/java/com/contentorganizer/servicename
+  /domain           # Domain models, entities, value objects
+    /model         # Domain entities
+    /service       # Domain services
+    /repository    # Repository interfaces
+    /event         # Domain events
+  /application      # Application layer
+    /service       # Application services
+    /dto           # Data transfer objects
+    /command       # Command objects
+    /handler       # Event handlers
+  /infrastructure   # Infrastructure layer
+    /repository    # Repository implementations
+    /messaging     # Redis/Event messaging
+    /config        # Configuration classes
+    /external      # External service integrations
+  /presentation     # Presentation layer
+    /controller    # REST controllers
+    /dto           # Request/Response DTOs
+/src/main/resources
+  /application.properties        # Common config
+  /application-local.properties  # Local credentials (gitignored)
+/src/test/java                   # Test files
+/docker                          # Docker configurations
+/docs                           # Service documentation
+```
+
+## Key Principles to Follow
+
+1. **Event-First Design**: Design around events and state changes
+2. **Idempotency**: All operations should be idempotent where possible
+3. **Scalability**: Design for horizontal scaling from the start
+4. **Maintainability**: Write code that is easy to understand and modify
+5. **Observability**: Implement proper monitoring and logging
+6. **Security**: Security should be built-in, not bolted-on
+7. **Performance**: Consider performance implications of all design decisions
+
+## Common Patterns to Use
+
+### DDD (Domain Driven Design) Patterns
+- Aggregate Pattern for consistency boundaries
+- Repository Pattern for data access abstraction
+- Domain Events for decoupling
+- Value Objects for domain modeling
+- Domain Services for complex business logic
+
+### Microservices Patterns
+- Command Query Responsibility Segregation (CQRS)
+- Event Sourcing where appropriate
+- Saga Pattern for distributed transactions
+- Circuit Breaker for resilience
+- API Gateway for service orchestration
+
+### Java/Spring Specific Patterns
+- Dependency Injection with Spring
+- AOP for cross-cutting concerns
+- Template Pattern with Spring Templates
+- Factory Pattern for service creation
+- Builder Pattern for complex object creation
+
+## Development Rules
+
+### Critical Requirements
+1. **NO MOCK DATA**: Never use mock data in any part of the system
+2. **Credentials Management**: ALWAYS use application-local.properties for credentials
+3. **Containerization**: Every service must be fully Docker-compatible
+4. **Event-Driven**: All inter-service communication through events
+5. **Error Handling**: Continue development without asking questions when errors occur
+6. **Version Control**: Commit and push after every significant step
+
+### Microservices Structure
+- **orchestrator-service**: Main coordination service with cron/manual triggers
+- **music-service**: AI music generation and collection
+- **image-service**: AI image generation and processing
+- **video-service**: Video composition and editing
+- **youtube-service**: YouTube upload and management
+- **seo-service**: SEO optimization and ChatGPT integration
+
+### Event Flow Design
+1. Orchestrator triggers video creation process
+2. Music service generates/collects music → publishes MusicReadyEvent
+3. Image service generates visuals → publishes ImageReadyEvent
+4. Video service waits for both events, then composes video → publishes VideoReadyEvent
+5. SEO service generates metadata → publishes SEOReadyEvent
+6. YouTube service waits for video and SEO events, then uploads → publishes VideoPublishedEvent
+
+Remember: Always consider the long-term maintainability and scalability of the system. Write code that your future self and your team members will thank you for! 

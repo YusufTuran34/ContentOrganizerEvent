@@ -1,0 +1,17 @@
+# Copy this file to application-local.properties and fill in your actual credentials
+# This file is used for local development and testing
+
+# Jamendo API Credentials
+JAMENDO_CLIENT_ID=your_jamendo_client_id
+JAMENDO_CLIENT_SECRET=your_jamendo_client_secret
+
+# MongoDB Connection
+MONGODB_URI=mongodb://localhost:27017/contentorganizer
+
+# Redis Connection
+REDIS_HOST=localhost
+REDIS_PORT=6379
+
+# Local Development Settings
+music.download.base-path=./music-downloads
+logging.level.com.contentorganizer.music=DEBUG 

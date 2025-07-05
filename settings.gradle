@@ -1,0 +1,10 @@
+rootProject.name = 'content-organizer-event-driven-system'
+
+include 'services:shared-common'
+include 'services:orchestrator-service'
+include 'services:music-service'
+include 'services:image-service'
+include 'services:video-service'
+include 'services:seo-service'
+include 'services:youtube-service'
+include 'services:chatgpt-service' 

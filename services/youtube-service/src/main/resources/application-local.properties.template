@@ -1,0 +1,22 @@
+# YouTube Service Local Configuration Template
+# Copy this file to application-local.properties and fill in your actual credentials
+
+# Google OAuth Credentials for YouTube API
+GOOGLE_CLIENT_ID=your-google-client-id-here
+GOOGLE_CLIENT_SECRET=your-google-client-secret-here
+GOOGLE_REFRESH_TOKEN=your-google-refresh-token-here
+
+# YouTube Live Streaming
+YOUTUBE_STREAM_KEY=your-youtube-stream-key-here
+
+# ChatGPT Service URL (if different from default)
+# chatgpt.service.url=http://localhost:8080
+
+# Database Configuration (if different from default)
+# spring.data.mongodb.uri=mongodb://localhost:27017/contentorganizer
+# spring.data.redis.host=localhost
+# spring.data.redis.port=6379
+
+# FFmpeg Configuration (if different from default)
+# ffmpeg.temp-directory=./temp-videos
+# ffmpeg.output-directory=./processed-videos 
